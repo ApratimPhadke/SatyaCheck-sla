@@ -1,3 +1,4 @@
+
 import streamlit as st
 st.set_page_config(page_title="Satya Check", page_icon="🕵🏻", layout="wide")
 
@@ -14,6 +15,9 @@ st.markdown("""
 # ------------------------------
 import firebase_admin
 from firebase_admin import credentials, firestore, initialize_app
+st.write("Type of firebase_credentials:", type(st.secrets["firebase_credentials"]))
+st.write("Keys in firebase_credentials:", list(st.secrets["firebase_credentials"].keys()))
+
 
 
 # Initialize Firebase only once

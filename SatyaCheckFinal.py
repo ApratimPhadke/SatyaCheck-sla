@@ -7,30 +7,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ------------------------------
-# Firebase Firestore Logging Setup
-# ------------------------------
-import firebase_admin
-from firebase_admin import credentials, firestore
-
-# Initialize Firebase only once
-try:
-    firebase_admin.get_app()
-except ValueError:
-    cred = credentials.Certificate("firebase_credentials.json")
-    firebase_admin.initialize_app(cred)
-
-db = firestore.client()
-
-def log_activity_firestore(event_type, event_details):
-    doc_ref = db.collection("user_activity").document()
-    data = {
-        "event_type": event_type,
-        "event_details": event_details,
-        "timestamp": firestore.SERVER_TIMESTAMP
-    }
-    doc_ref.set(data)
-
-# ------------------------------
 # Other Imports and Setup
 # ------------------------------
 import re, io, csv, asyncio
@@ -409,7 +385,6 @@ def create_statistics_visualizations(posts, keywords_data, platform_counts, char
             fig.update_layout(xaxis_title=None, yaxis_title="Number of Posts", margin=dict(t=40, b=20, l=20, r=20), height=300)
             fig.update_traces(textposition='auto')
             st.plotly_chart(fig, use_container_width=True)
-    
 
 def display_analyzed_posts(posts, keywords, show_details=True):
     if not posts:
@@ -523,7 +498,6 @@ def main():
         analyze_text_button = st.button("Analyze Text")
         
         if analyze_text_button and article_text:
-            log_activity_firestore("Analyze_Text_Clicked", "User clicked 'Analyze Text'")
             with st.spinner("Extracting keywords..."):
                 keywords = extract_comprehensive_keywords(article_text)
                 st.session_state["extracted_keywords"] = keywords
@@ -552,7 +526,6 @@ def main():
             feedback = st.text_input("Have suggestions or feedback about the prediction? Tell us below:")
             if st.button("Submit Feedback"):
                 if feedback:
-                    log_activity_firestore("Feedback_Submitted", f"Feedback: {feedback}")
                     st.session_state.feedback = st.session_state.get("feedback", [])
                     st.session_state.feedback.append({"text": article_text, "feedback": feedback, "timestamp": datetime.utcnow().isoformat()})
                     st.success("Thank you for your feedback!")
@@ -571,7 +544,7 @@ def main():
                 <li>It concurrently searches social media platforms (e.g. Reddit & YouTube) using caching for efficiency.</li>
                 <li>Heuristics—including sensationalism scoring and a (stub) transformer-based model—calculate a credibility score.</li>
                 <li>Fake news detection is customized based on your selected profession.</li>
-                <li>You receive detailed data analysis along with options to download reports and provide feedback.</li>
+                                <li>You receive detailed data analysis along with options to download reports and provide feedback.</li>
             </ol>
             <h4>Who Can Benefit?</h4>
             <ul>
@@ -590,7 +563,7 @@ def main():
                 <li>Risk Management Specialists</li>
             </ul>
             <p><strong>Note:</strong> This tool is part of an evolving media literacy toolkit. Always verify information with multiple sources.
-                    we provide you a spreadsheetfile with all of your searched data so you can build a dataset and improve our opensource model. </p>
+                    We provide you a spreadsheet file with all of your searched data so you can build a dataset and improve our open-source model.</p>
         </div>
         """, unsafe_allow_html=True)
 

@@ -2,6 +2,9 @@ import streamlit as st
 st.set_page_config(page_title="Satya Check", page_icon="🕵🏻", layout="wide")
 
 # Load Google Font
+from google.api_core.retry import Retry
+# Define a custom retry policy with a 120-second deadline
+custom_retry = Retry(deadline=120)
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
@@ -10,9 +13,12 @@ st.markdown("""
 # Firebase Firestore Logging Setup
 # ------------------------------
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, initialize_app
+
 
 # Initialize Firebase only once
+# Retrieve the service account info from secrets
+service_account_info = st.secrets["firebase_credentials"]
 try:
     firebase_admin.get_app()
 except ValueError:
@@ -20,6 +26,13 @@ except ValueError:
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+service_account_info = st.secrets.get("firebase_credentials")
+if service_account_info:
+    st.write("Credentials loaded.")
+    cred = credentials.Certificate(service_account_info)
+    initialize_app(cred)
+else:
+    st.error("Firebase credentials not found!")
 
 def log_activity_firestore(event_type, event_details):
     doc_ref = db.collection("user_activity").document()

@@ -2,9 +2,6 @@ import streamlit as st
 st.set_page_config(page_title="Satya Check", page_icon="🕵🏻", layout="wide")
 
 # Load Google Font
-from google.api_core.retry import Retry
-# Define a custom retry policy with a 120-second deadline
-custom_retry = Retry(deadline=120)
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
@@ -13,17 +10,9 @@ st.markdown("""
 # Firebase Firestore Logging Setup
 # ------------------------------
 import firebase_admin
-from firebase_admin import credentials, firestore, initialize_app
-st.write("Type of firebase_credentials:", type(st.secrets["firebase_credentials"]))
-st.write("Keys in firebase_credentials:", list(st.secrets["firebase_credentials"].keys()))
-
-
+from firebase_admin import credentials, firestore
 
 # Initialize Firebase only once
-# Retrieve the service account info from secrets
-service_account_info = st.secrets["firebase_credentials"].to_dict()
-cred = credentials.Certificate(service_account_info)
-
 try:
     firebase_admin.get_app()
 except ValueError:
@@ -31,13 +20,6 @@ except ValueError:
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-service_account_info = st.secrets.get("firebase_credentials")
-if service_account_info:
-    st.write("Credentials loaded.")
-    cred = credentials.Certificate(service_account_info)
-    initialize_app(cred)
-else:
-    st.error("Firebase credentials not found!")
 
 def log_activity_firestore(event_type, event_details):
     doc_ref = db.collection("user_activity").document()
@@ -70,10 +52,10 @@ from cachetools import TTLCache
 nlp = spacy.load("en_core_web_sm")
 
 # API Configurations (replace with your own keys)
-REDDIT_CLIENT_ID = "DUOPbRCJzgIrovG_n_1gfw"
-REDDIT_CLIENT_SECRET = "DVHu0K_qiBPHpXWJ3AV7HcfXMgZU5Q"
-REDDIT_USER_AGENT = "script:news_verifier_app:1.0 (by /u/Any_Butterscotch_268 )"
-YOUTUBE_API_KEY = "AIzaSyCUmfjixPPCcpovy45VdHXaEqAelFaJgxY"
+REDDIT_CLIENT_ID = "zUm08w-ffHWzi9jim_eq7w"
+REDDIT_CLIENT_SECRET = "zjvo8yfii4iEHRLBXbC2-55gQf3LAQ"
+REDDIT_USER_AGENT = "script:news_verifier_app:1.0 (by /u/Shlong_up )"
+YOUTUBE_API_KEY = "AIzaSyCQpMim9b8Se2ArZpEJjRBAzK7jaDl4-Ls"
 
 # Initialize API clients
 reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,

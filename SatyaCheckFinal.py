@@ -22,7 +22,9 @@ st.write("Keys in firebase_credentials:", list(st.secrets["firebase_credentials"
 
 # Initialize Firebase only once
 # Retrieve the service account info from secrets
-service_account_info = st.secrets["firebase_credentials"]
+service_account_info = st.secrets["firebase_credentials"].to_dict()
+cred = credentials.Certificate(service_account_info)
+
 try:
     firebase_admin.get_app()
 except ValueError:

@@ -31,7 +31,7 @@ nlp = spacy.load("en_core_web_sm")
 REDDIT_CLIENT_ID = "zUm08w-ffHWzi9jim_eq7w"
 REDDIT_CLIENT_SECRET = "zjvo8yfii4iEHRLBXbC2-55gQf3LAQ"
 REDDIT_USER_AGENT = "script:news_verifier_app:1.0 (by /u/Shlong_up )"
-YOUTUBE_API_KEY = "AIzaSyCQpMim9b8Se2ArZpEJjRBAzK7jaDl4-Ls"
+YOUTUBE_API_KEY = "AIzaSyCUmfjixPPCcpovy45VdHXaEqAelFaJgxY"
 
 # Initialize API clients
 reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,
